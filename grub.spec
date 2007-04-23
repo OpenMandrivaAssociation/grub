@@ -27,6 +27,7 @@ Patch22: grub-0.94-addsyncs.patch
 #Patch100: grub-0.90-append.patch
 # add support for lilo -R-esque select a new os to boot into
 Patch101: grub-0.97-once.patch
+Patch102: grub-0.97-once-info-doc.patch
 
 # patches 500+ are for miscellaneous little things
 # support for non-std devs (eg cciss, etc)
@@ -127,6 +128,7 @@ More documentation for grub
 %patch22 -p1 -b .addsync
 
 %patch101 -p1 -b .bootonce
+%patch102 -p1 -b .bootonce-doc -z .pix
 
 %patch500 -p1 -b .raid
 %patch501 -p1 -b .i2o
@@ -172,6 +174,9 @@ More documentation for grub
 %patch10017 -p0
 
 %build
+# force building grub.info from grub.texi (since patches do not edit both)
+rm docs/grub.info
+
 rm -f configure; aclocal-1.9 && automake-1.9 && autoheader && autoconf --force
 ./configure --build=%{_target_platform} \
             --host=%{_host} \
