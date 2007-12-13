@@ -14,6 +14,7 @@ Patch10007: grub-0.91-nice-magic.patch
 Patch10009: grub-0.95-mem_lower.patch
 Patch10015: grub-0.97-install_sh.patch
 Patch10016: grub-0.97-reiser4.patch
+Patch10018: grub-0.97-please-automake--add-AM_PROG_AS.patch
 
 # gfxboot patch from SuSE
 Patch10017: grub-gfxmenu-v8.diff
@@ -170,6 +171,7 @@ More documentation for grub
 %patch10009 -p1
 %patch10015 -p1
 #%patch10016 -p1
+%patch10018 -p1
 
 %patch10017 -p0
 
@@ -177,7 +179,8 @@ More documentation for grub
 # force building grub.info from grub.texi (since patches do not edit both)
 rm docs/grub.info
 
-rm -f configure; aclocal-1.9 && automake-1.9 && autoheader && autoconf --force
+autoreconf
+
 ./configure --build=%{_target_platform} \
             --host=%{_host} \
             --target=%{_target} \
