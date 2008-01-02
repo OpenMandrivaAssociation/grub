@@ -103,6 +103,7 @@ BuildRequires: tetex-latex
 BuildRequires: texinfo
 Requires(post): info-install
 Requires(preun): info-install
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Exclusivearch: %ix86 x86_64 amd64 ia32e
 
 Provides: bootloader
