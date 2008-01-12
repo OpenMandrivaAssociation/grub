@@ -1,7 +1,7 @@
 Summary: GRand Unified Bootloader
 Name: grub
 Version: 0.97
-Release: %mkrel 20
+Release: %mkrel 21
 URL: http://www.gnu.org/software/grub/
 Source0: ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
 Source2: menu.lst.example
