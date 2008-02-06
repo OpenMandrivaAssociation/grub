@@ -1,7 +1,7 @@
 Summary: GRand Unified Bootloader
 Name: grub
 Version: 0.97
-Release: %mkrel 21
+Release: %mkrel 22
 URL: http://www.gnu.org/software/grub/
 Source0: ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
 Source2: menu.lst.example
@@ -18,6 +18,9 @@ Patch10018: grub-0.97-please-automake--add-AM_PROG_AS.patch
 
 # gfxboot patch from SuSE
 Patch10017: grub-gfxmenu-v8.diff
+
+# handle the now default ext3 format (from debian which took it from fedora)
+Patch1: grub-ext3-256byte-inode.patch
 
 # fedora patches
 Patch22: grub-0.94-addsyncs.patch
@@ -126,6 +129,7 @@ More documentation for grub
 %prep
 %setup -q
 
+%patch1 -p1 -b .256byte-inode
 %patch22 -p1 -b .addsync
 
 %patch101 -p1 -b .bootonce
