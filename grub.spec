@@ -1,7 +1,7 @@
 Summary: GRand Unified Bootloader
 Name: grub
 Version: 0.97
-Release: %mkrel 22
+Release: %mkrel 23
 URL: http://www.gnu.org/software/grub/
 Source0: ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
 Source2: menu.lst.example
@@ -15,6 +15,7 @@ Patch10009: grub-0.95-mem_lower.patch
 Patch10015: grub-0.97-install_sh.patch
 Patch10016: grub-0.97-reiser4.patch
 Patch10018: grub-0.97-please-automake--add-AM_PROG_AS.patch
+Patch10019: grub-0.97-ext4extents.patch
 
 # gfxboot patch from SuSE
 Patch10017: grub-gfxmenu-v8.diff
@@ -178,6 +179,7 @@ More documentation for grub
 %patch10018 -p1
 
 %patch10017 -p0
+%patch10019 -p1
 
 %build
 # force building grub.info from grub.texi (since patches do not edit both)
