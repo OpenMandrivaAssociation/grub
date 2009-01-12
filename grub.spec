@@ -1,7 +1,9 @@
+%define _default_patch_fuzz 2
+
 Summary: GRand Unified Bootloader
 Name: grub
 Version: 0.97
-Release: %mkrel 24
+Release: %mkrel 25
 URL: http://www.gnu.org/software/grub/
 Source0: ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
 Source2: menu.lst.example
@@ -96,6 +98,26 @@ Patch1148: grub-0.97-mactel-kbd.patch
 # fix grub-install to notice mpath partitions
 Patch1150: grub-0.97-mpath.patch
 
+# (from ubuntu) (nb: needed for grub-uuid.diff)
+Patch1151: grub-varargs.diff
+# (from ubuntu) (nb: needed for grub-uuid.diff)
+Patch1152: grub-gpt.diff
+
+# (from ubuntu)
+# note that uuid support is partial (only in menu.lst), stage2 & menu.lst are
+# still accessed through (hdX,Y)
+# 
+# pros of using uuid in menu.lst:
+# - menu.lst hd0/hd1 independance.
+#   this is mostly useful when menu.lst is read through "configfile"
+# missing feature:
+# - partition renumbering will still break boot if install.sh is not modified
+#  (since install.sh can't use uuid)
+# 
+# anyway, this patch is useful to have even unused, since it allows
+# "configfile" to handle ubuntu's menu.lst
+Patch1153: grub-uuid.diff
+
 License: GPL
 Group: System/Kernel and hardware
 BuildRequires: autoconf2.5
@@ -168,6 +190,10 @@ More documentation for grub
 %patch1148 -p1 -b .mactel-kbd
 
 %patch1150 -p1 -b .mpath
+
+%patch1151 -p1 -b .varargs
+%patch1152 -p1 -b .gpt
+%patch1153 -p1 -b .uuid
 
 %patch10000 -p1
 %patch10001 -p1
