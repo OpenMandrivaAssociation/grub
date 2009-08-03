@@ -98,6 +98,9 @@ Patch1148: grub-0.97-mactel-kbd.patch
 # fix grub-install to notice mpath partitions
 Patch1150: grub-0.97-mpath.patch
 
+# fix grub-install to notice virtio partitions (from fedora)
+Patch1154: grub-0.97-virtio-support.patch
+
 # (from ubuntu) (nb: needed for grub-uuid.diff)
 Patch1151: grub-varargs.diff
 # (from ubuntu) (nb: needed for grub-uuid.diff)
@@ -190,6 +193,7 @@ More documentation for grub
 %patch1148 -p1 -b .mactel-kbd
 
 %patch1150 -p1 -b .mpath
+%patch1154 -p1 -b .virtio
 
 %patch1151 -p1 -b .varargs
 %patch1152 -p1 -b .gpt
