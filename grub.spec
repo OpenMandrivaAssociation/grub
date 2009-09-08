@@ -3,7 +3,7 @@
 Summary: GRand Unified Bootloader
 Name: grub
 Version: 0.97
-Release: %mkrel 27
+Release: %mkrel 28
 URL: http://www.gnu.org/software/grub/
 Source0: ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
 Source2: menu.lst.example
@@ -17,7 +17,6 @@ Patch10009: grub-0.95-mem_lower.patch
 Patch10015: grub-0.97-install_sh.patch
 Patch10016: grub-0.97-reiser4.patch
 Patch10018: grub-0.97-please-automake--add-AM_PROG_AS.patch
-Patch10019: grub-0.97-ext4extents.patch
 
 # gfxboot patch from SuSE
 Patch10017: grub-gfxmenu-v8.diff
@@ -27,6 +26,9 @@ Patch1: grub-ext3-256byte-inode.patch
 
 # fedora patches
 Patch22: grub-0.94-addsyncs.patch
+Patch23: 0002-Add-strspn-strcspn-and-strtok_r.patch
+Patch24: 0003-Allow-passing-multiple-image-files-to-the-initrd-com.patch
+Patch25: grub-ext4-support.patch
 
 # patches 100-199 are for features proposed but not accepted upstream
 # add support for appending kernel arguments
@@ -157,6 +159,9 @@ More documentation for grub
 
 %patch1 -p1 -b .256byte-inode
 %patch22 -p1 -b .addsync
+%patch23 -p1 -b .string-functions
+%patch24 -p1 -b .multiple-initrd
+%patch25 -p1 -b .ext4
 
 %patch101 -p1 -b .bootonce
 %patch102 -p1 -b .bootonce-doc -z .pix
@@ -209,7 +214,6 @@ More documentation for grub
 %patch10018 -p1
 
 %patch10017 -p0
-%patch10019 -p1
 
 %build
 # force building grub.info from grub.texi (since patches do not edit both)
