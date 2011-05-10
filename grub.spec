@@ -3,7 +3,7 @@
 Summary: GRand Unified Bootloader
 Name: grub
 Version: 0.97
-Release: %mkrel 33
+Release: %mkrel 34
 URL: http://www.gnu.org/software/grub/
 Source0: ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
 Source2: menu.lst.example
@@ -225,7 +225,7 @@ rm docs/grub.info
 
 autoreconf
 
-CFLAGS="-Os -g -fno-strict-aliasing -fno-stack-protector -Wl,--build-id=none" \
+CFLAGS="-Os -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions -Wl,--build-id=none" \
 ./configure --build=%{_target_platform} \
             --host=%{_host} \
             --target=%{_target} \
