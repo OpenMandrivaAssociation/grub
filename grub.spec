@@ -3,7 +3,7 @@
 Summary: GRand Unified Bootloader
 Name: grub
 Version: 0.97
-Release: %mkrel 32
+Release: %mkrel 33
 URL: http://www.gnu.org/software/grub/
 Source0: ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
 Source2: menu.lst.example
@@ -123,6 +123,9 @@ Patch1152: grub-gpt.diff
 # "configfile" to handle ubuntu's menu.lst
 Patch1153: grub-uuid.diff
 
+# grub patch for dealing with build-id objheader inserted into stage1/2 files 
+Patch1155: grub-0.97-grub-build-id.patch
+
 License: GPL
 Group: System/Kernel and hardware
 BuildRequires: autoconf2.5
@@ -203,6 +206,7 @@ More documentation for grub
 %patch1151 -p1 -b .varargs
 %patch1152 -p1 -b .gpt
 %patch1153 -p1 -b .uuid
+%patch1155 -p1
 
 %patch10000 -p1
 %patch10001 -p1
@@ -221,7 +225,7 @@ rm docs/grub.info
 
 autoreconf
 
-CFLAGS="-Os -g -fno-strict-aliasing -fno-stack-protector" \
+CFLAGS="-Os -g -fno-strict-aliasing -fno-stack-protector -Wl,--build-id=none" \
 ./configure --build=%{_target_platform} \
             --host=%{_host} \
             --target=%{_target} \
