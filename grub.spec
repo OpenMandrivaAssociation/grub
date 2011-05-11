@@ -1,9 +1,10 @@
+%define with_gcc_42 0
 %define _default_patch_fuzz 2
 
 Summary: GRand Unified Bootloader
 Name: grub
 Version: 0.97
-Release: 34.1
+Release: 34
 URL: http://www.gnu.org/software/grub/
 Source0: ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
 Source2: menu.lst.example
@@ -130,7 +131,9 @@ License: GPL
 Group: System/Kernel and hardware
 BuildRequires: autoconf2.5
 BuildRequires: automake1.8
+%if %{with_gcc_42}
 BuildRequires: gcc4.2
+%endif
 BuildRequires: libgpm-devel
 BuildRequires: libncurses-devel
 BuildRequires: tetex-dvips
@@ -225,7 +228,9 @@ More documentation for grub
 rm docs/grub.info
 
 autoreconf
+%if %{with_gcc_42}
 CC=%{_bindir}/gcc4.2 \
+%endif
 CFLAGS="-Os -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions -Wl,--build-id=none" \
 ./configure --build=%{_target_platform} \
             --host=%{_host} \
