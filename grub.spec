@@ -134,6 +134,7 @@ BuildRequires: gcc4.2
 BuildRequires: libgpm-devel
 BuildRequires: libncurses-devel
 BuildRequires: texlive
+BuildRequires: texinfo
 Requires(post): info-install
 Requires(preun): info-install
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
