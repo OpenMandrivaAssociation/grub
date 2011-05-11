@@ -3,7 +3,7 @@
 Summary: GRand Unified Bootloader
 Name: grub
 Version: 0.97
-Release: %mkrel 34
+Release: 34.1
 URL: http://www.gnu.org/software/grub/
 Source0: ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
 Source2: menu.lst.example
@@ -130,11 +130,10 @@ License: GPL
 Group: System/Kernel and hardware
 BuildRequires: autoconf2.5
 BuildRequires: automake1.8
+BuildRequires: gcc4.2
 BuildRequires: libgpm-devel
 BuildRequires: libncurses-devel
-BuildRequires: tetex-dvips
-BuildRequires: tetex-latex
-BuildRequires: texinfo
+BuildRequires: texlive
 Requires(post): info-install
 Requires(preun): info-install
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -224,7 +223,7 @@ More documentation for grub
 rm docs/grub.info
 
 autoreconf
-
+CC=%{_bindir}/gcc4.2 \
 CFLAGS="-Os -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions -Wl,--build-id=none" \
 ./configure --build=%{_target_platform} \
             --host=%{_host} \
