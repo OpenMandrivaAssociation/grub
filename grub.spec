@@ -133,7 +133,8 @@ BuildRequires: automake1.8
 BuildRequires: gcc4.2
 BuildRequires: libgpm-devel
 BuildRequires: libncurses-devel
-BuildRequires: texlive
+BuildRequires: tetex-dvips
+BuildRequires: tetex-latex
 BuildRequires: texinfo
 Requires(post): info-install
 Requires(preun): info-install
