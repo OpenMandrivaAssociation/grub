@@ -4,7 +4,7 @@
 Summary: GRand Unified Bootloader
 Name: grub
 Version: 0.97
-Release: 34
+Release: 35
 URL: http://www.gnu.org/software/grub/
 Source0: ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
 Source2: menu.lst.example
@@ -53,6 +53,10 @@ Patch505: grub-0.94-initrdmax.patch
 
 # we need to use O_DIRECT to avoid hitting oddities with caching
 Patch800: grub-0.95-odirect.patch
+
+# odirect actually causes problem (open returns EINVAL) with gfxboot
+# install of grub in a file (e.g. preview mode under qemu)
+Patch801: grub-0.97-odirect-on-device-only.patch
 
 # the 2.6 kernel no longer does geometry fixups.  so now I get to do it
 # instead in userspace everywhere.  
@@ -180,6 +184,7 @@ More documentation for grub
 %patch505 -p1 -b .initrdmax
 
 %patch800 -p1 -b .odirect
+%patch801 -p1 -b .odirect-on-device-only
 
 %patch1000 -p1 -b .26geom
 
