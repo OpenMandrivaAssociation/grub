@@ -4,7 +4,7 @@
 Summary: GRand Unified Bootloader
 Name: grub
 Version: 0.97
-Release: 35
+Release: 36
 URL: http://www.gnu.org/software/grub/
 Source0: ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
 Source2: menu.lst.example
@@ -138,6 +138,7 @@ BuildRequires: automake1.8
 %if %{with_gcc_42}
 BuildRequires: gcc4.2
 %endif
+BuildRequires: glibc-static-devel
 BuildRequires: libgpm-devel
 BuildRequires: libncurses-devel
 BuildRequires: tetex-dvips
@@ -232,11 +233,14 @@ More documentation for grub
 # force building grub.info from grub.texi (since patches do not edit both)
 rm docs/grub.info
 
+# automake 1.11.2
+perl -pi -e 's|pkglib_|pkgdata_|g;' stage{1,2}/Makefile.{am,in}
 autoreconf
+
 %if %{with_gcc_42}
 CC=%{_bindir}/gcc4.2 \
 %endif
-CFLAGS="-Os -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions -Wl,--build-id=none" \
+CFLAGS="-Os -static -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions -Wl,--build-id=none" \
 ./configure --build=%{_target_platform} \
             --host=%{_host} \
             --target=%{_target} \
@@ -245,13 +249,14 @@ CFLAGS="-Os -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions 
             --bindir=%{_bindir} \
             --mandir=%{_mandir} \
             --infodir=%{_infodir} \
+	    --datadir=/lib/grub/%{_arch}-%{_vendor} \
             --disable-auto-linux-mem-opt
-%make
+%make pkgdatadir=/lib/grub/%{_arch}-%{_vendor}
 make -C docs ps
 
 %install
 rm -rf %{buildroot}
-%makeinstall_std
+%makeinstall_std pkgdatadir=/lib/grub/%{_arch}-%{_vendor}
 rm -f %{buildroot}/%{_infodir}/dir
 install -d %{buildroot}/boot/grub
 install -m 0644 %{_sourcedir}/menu.lst.example %{buildroot}/boot/grub
@@ -265,7 +270,7 @@ if [ -f /boot/grub/install.sh ]; then
 	if [ -x /usr/sbin/detectloader ]; then
 		LOADER=$(/usr/sbin/detectloader)
 		if [ "$LOADER" = "GRUB" ]; then
-			for file in /lib/grub/%{_arch}-%{_real_vendor}/*stage*; do
+			for file in /lib/grub/%{_arch}-%{_vendor}/*stage*; do
 				cp -f $file /boot/grub/ || :
 			done
 			sh /boot/grub/install.sh > /dev/null
@@ -318,7 +323,7 @@ if [ -f /boot/grub/install.sh ]; then
 	if [ -x /usr/sbin/detectloader ]; then
 		LOADER=$(/usr/sbin/detectloader)
 		if [ "$LOADER" = "GRUB" ]; then
-			for file in /lib/grub/%{_arch}-%{_real_vendor}/*stage*; do
+			for file in /lib/grub/%{_arch}-%{_vendor}/*stage*; do
 				cp -f $file /boot/grub/ || :
 			done
 			sh /boot/grub/install.sh > /dev/null
