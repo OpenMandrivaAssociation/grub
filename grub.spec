@@ -224,7 +224,7 @@ More documentation for grub
 %patch10007 -p1
 %patch10009 -p1
 %patch10015 -p1
-#%patch10016 -p1
+#%#patch10016 -p1
 %patch10018 -p1
 
 %patch10017 -p0
@@ -242,15 +242,15 @@ CC=%{_bindir}/gcc4.2 \
 %endif
 CFLAGS="-Os -static -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions -Wl,--build-id=none" \
 ./configure --build=%{_target_platform} \
-            --host=%{_host} \
-            --target=%{_target} \
-            --prefix=%{_prefix} \
-            --exec-prefix=/ \
-            --bindir=%{_bindir} \
-            --mandir=%{_mandir} \
-            --infodir=%{_infodir} \
+	    --host=%{_host} \
+	    --target=%{_target} \
+	    --prefix=%{_prefix} \
+	    --exec-prefix=/ \
+	    --bindir=%{_bindir} \
+	    --mandir=%{_mandir} \
+	    --infodir=%{_infodir} \
 	    --datadir=/lib/grub/%{_arch}-%{_vendor} \
-            --disable-auto-linux-mem-opt
+	    --disable-auto-linux-mem-opt
 %make pkgdatadir=/lib/grub/%{_arch}-%{_vendor}
 make -C docs ps
 
@@ -259,7 +259,7 @@ rm -rf %{buildroot}
 %makeinstall_std pkgdatadir=/lib/grub/%{_arch}-%{_vendor}
 rm -f %{buildroot}/%{_infodir}/dir
 install -d %{buildroot}/boot/grub
-install -m 0644 %{_sourcedir}/menu.lst.example %{buildroot}/boot/grub
+install -m 0644 %{SOURCE2} %{buildroot}/boot/grub
 
 %clean
 rm -rf %{buildroot}
