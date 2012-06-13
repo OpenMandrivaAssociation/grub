@@ -1,117 +1,117 @@
 %define with_gcc_42 0
 %define _default_patch_fuzz 2
 
-Summary: GRand Unified Bootloader
-Name: grub
-Version: 0.97
-Release: 36
-URL: http://www.gnu.org/software/grub/
-Source0: ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
-Source2: menu.lst.example
+Summary:	GRand Unified Bootloader
+Name:		grub
+Version:	0.97
+Release:	37
+URL:		http://www.gnu.org/software/grub/
+Source0:	ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
+Source2:	menu.lst.example
 
 # Mandriva patches
-Patch10000: grub-0.5.96.1-ezd.patch
-Patch10001: grub-0.97-gcc4_warnings.patch
-Patch10005: grub-0.95-eltorito.patch
-Patch10007: grub-0.91-nice-magic.patch
-Patch10009: grub-0.95-mem_lower.patch
-Patch10015: grub-0.97-install_sh.patch
-Patch10016: grub-0.97-reiser4.patch
-Patch10018: grub-0.97-please-automake--add-AM_PROG_AS.patch
+Patch10000:	grub-0.5.96.1-ezd.patch
+Patch10001:	grub-0.97-gcc4_warnings.patch
+Patch10005:	grub-0.95-eltorito.patch
+Patch10007:	grub-0.91-nice-magic.patch
+Patch10009:	grub-0.95-mem_lower.patch
+Patch10015:	grub-0.97-install_sh.patch
+Patch10016:	grub-0.97-reiser4.patch
+Patch10018:	grub-0.97-please-automake--add-AM_PROG_AS.patch
 
 # gfxboot patch from SuSE
-Patch10017: grub-gfxmenu-v8.diff
+Patch10017:	grub-gfxmenu-v8.diff
 
 # handle the now default ext3 format (from debian which took it from fedora)
-Patch1: grub-ext3-256byte-inode.patch
+Patch1:		grub-ext3-256byte-inode.patch
 
 # fedora patches
-Patch22: grub-0.94-addsyncs.patch
-Patch23: 0002-Add-strspn-strcspn-and-strtok_r.patch
-Patch24: 0003-Allow-passing-multiple-image-files-to-the-initrd-com.patch
-Patch25: grub-ext4-support.patch
+Patch22:	grub-0.94-addsyncs.patch
+Patch23:	0002-Add-strspn-strcspn-and-strtok_r.patch
+Patch24:	0003-Allow-passing-multiple-image-files-to-the-initrd-com.patch
+Patch25:	grub-ext4-support.patch
 
 # patches 100-199 are for features proposed but not accepted upstream
 # add support for appending kernel arguments
 #XXX patch below conflicts with our graphics patch
 #Patch100: grub-0.90-append.patch
 # add support for lilo -R-esque select a new os to boot into
-Patch101: grub-0.97-once.patch
-Patch102: grub-0.97-once-info-doc.patch
+Patch101:	grub-0.97-once.patch
+Patch102:	grub-0.97-once-info-doc.patch
 
 # patches 500+ are for miscellaneous little things
 # support for non-std devs (eg cciss, etc)
-Patch500: grub-0.93-special-device-names.patch
+Patch500:	grub-0.93-special-device-names.patch
 # i2o device support
-Patch501: grub-0.94-i2o.patch
+Patch501:	grub-0.94-i2o.patch
 # detect cciss/ida/i2o
-Patch502: grub-0.95-moreraid.patch
+Patch502:	grub-0.95-moreraid.patch
 
 # for some reason, using the initrd max part of the setup.S structure
 # causes problems on x86_64 and with 4G/4G
-Patch505: grub-0.94-initrdmax.patch
+Patch505:	grub-0.94-initrdmax.patch
 
 # we need to use O_DIRECT to avoid hitting oddities with caching
-Patch800: grub-0.95-odirect.patch
+Patch800:	grub-0.95-odirect.patch
 
 # odirect actually causes problem (open returns EINVAL) with gfxboot
 # install of grub in a file (e.g. preview mode under qemu)
-Patch801: grub-0.97-odirect-on-device-only.patch
+Patch801:	grub-0.97-odirect-on-device-only.patch
 
 # the 2.6 kernel no longer does geometry fixups.  so now I get to do it
 # instead in userspace everywhere.  
-Patch1000: grub-0.95-geometry-26kernel.patch
+Patch1000:	grub-0.95-geometry-26kernel.patch
 
 # Support for booting from a RAID1 device
-Patch1100: grub-0.95-md.patch
-Patch1101: grub-0.97-md-rework--mdv-adapted.patch
+Patch1100:	grub-0.95-md.patch
+Patch1101:	grub-0.97-md-rework--mdv-adapted.patch
 
 # Mark the simulation stack executable
 # (otherwise grub segfaults on x86_64 which uses "noexec")
-Patch1104: grub-0.97-nxstack.patch
-Patch1105: grub-0.97-nx-multiinstall.patch
+Patch1104:	grub-0.97-nxstack.patch
+Patch1105:	grub-0.97-nx-multiinstall.patch
 
 # always use a full path for mdadm.
-Patch1110: grub-0.97-mdadm-path.patch
+Patch1110:	grub-0.97-mdadm-path.patch
 # always install into the mbr if we're on a raid1 /boot.
-Patch1111: grub-0.95-md-mbr.patch
+Patch1111:	grub-0.95-md-mbr.patch
 
 # gcc4 fixes.
 #XXX patch below conflicts with our graphics patch
 #Patch1115: grub-0.97-gcc4.patch
 
 # Make non-MBR installs work again on non-raid1.
-Patch1120: grub-0.95-nonmbr.patch
+Patch1120:	grub-0.95-nonmbr.patch
 
 # Make "grub-install --recheck" look like the menace it is.
-Patch1130: grub-0.95-recheck-bad.patch
+Patch1130:	grub-0.95-recheck-bad.patch
 
 # Fix missing prototypes, since grub nicely sets -Wmissing-prototypes and
 # then tries to build conftests without them.
-Patch1135: grub-0.97-prototypes.patch
+Patch1135:	grub-0.97-prototypes.patch
 
 # install correctly on dmraid devices
-Patch1145: grub-0.97-dmraid.patch
-Patch1146: grub-0.97-dmraid-recheck-bad--mdv-adapted.patch
-Patch1147: grub-0.97-dmraid-partition-names.patch
+Patch1145:	grub-0.97-dmraid.patch
+Patch1146:	grub-0.97-dmraid-recheck-bad--mdv-adapted.patch
+Patch1147:	grub-0.97-dmraid-partition-names.patch
 
 # fix mactel keyboard bugs
-Patch1148: grub-0.97-mactel-kbd.patch
+Patch1148:	grub-0.97-mactel-kbd.patch
 
 # fix error reporting
 #XXX not very important, and would need adaptation, skipping
 #Patch1149: grub-0.97-stderr.patch
 
 # fix grub-install to notice mpath partitions
-Patch1150: grub-0.97-mpath.patch
+Patch1150:	grub-0.97-mpath.patch
 
 # fix grub-install to notice virtio partitions (from fedora)
-Patch1154: grub-0.97-virtio-support.patch
+Patch1154:	grub-0.97-virtio-support.patch
 
 # (from ubuntu) (nb: needed for grub-uuid.diff)
-Patch1151: grub-varargs.diff
+Patch1151:	grub-varargs.diff
 # (from ubuntu) (nb: needed for grub-uuid.diff)
-Patch1152: grub-gpt.diff
+Patch1152:	grub-gpt.diff
 
 # (from ubuntu)
 # note that uuid support is partial (only in menu.lst), stage2 & menu.lst are
@@ -126,31 +126,27 @@ Patch1152: grub-gpt.diff
 # 
 # anyway, this patch is useful to have even unused, since it allows
 # "configfile" to handle ubuntu's menu.lst
-Patch1153: grub-uuid.diff
+Patch1153:	grub-uuid.diff
 
 # grub patch for dealing with build-id objheader inserted into stage1/2 files 
-Patch1155: grub-0.97-grub-build-id.patch
+Patch1155:	grub-0.97-grub-build-id.patch
 
-License: GPL
-Group: System/Kernel and hardware
-BuildRequires: autoconf2.5
-BuildRequires: automake1.8
+License:	GPL
+Group:		System/Kernel and hardware
+BuildRequires:	autoconf2.5
+BuildRequires:	automake1.8
 %if %{with_gcc_42}
-BuildRequires: gcc4.2
+BuildRequires:	gcc4.2
 %endif
-BuildRequires: glibc-static-devel
-BuildRequires: libgpm-devel
-BuildRequires: libncurses-devel
-BuildRequires: tetex-dvips
-BuildRequires: tetex-latex
-BuildRequires: texinfo
-Requires(post): info-install
-Requires(preun): info-install
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-Exclusivearch: %ix86 x86_64 amd64 ia32e
+BuildRequires:	glibc-static-devel
+BuildRequires:	libgpm-devel
+BuildRequires:	libncurses-devel
+BuildRequires:	tetex-dvips
+BuildRequires:	tetex-latex
+BuildRequires:	texinfo
+Exclusivearch:	%ix86 x86_64 amd64 ia32e
 
-Provides: bootloader
-Conflicts: initscripts <= 6.40.2-15mdk
+Provides:	bootloader
 
 %description
 GRUB is a GPLed bootloader intended to unify bootloading across x86
@@ -160,8 +156,8 @@ of multiple boot images (needed for modular kernels such as the GNU
 Hurd).
 
 %package doc
-Summary: More documentation for grub
-Group: Books/Computer books
+Summary:	More documentation for grub
+Group:		Books/Computer books
 
 %description doc
 More documentation for grub
@@ -261,9 +257,6 @@ rm -f %{buildroot}/%{_infodir}/dir
 install -d %{buildroot}/boot/grub
 install -m 0644 %{SOURCE2} %{buildroot}/boot/grub
 
-%clean
-rm -rf %{buildroot}
-
 %post
 
 if [ -f /boot/grub/install.sh ]; then
@@ -300,13 +293,8 @@ elif [ -e /boot/grub/menu.lst -a -e /boot/grub/stage2 ]; then
 	echo "can not find where GRUB is installed"
     fi
 fi
-%_install_info %{name}.info
-%_install_info multiboot.info
 
 %preun
-%_remove_install_info %{name}.info
-%_remove_install_info multiboot.info
-
 # What a hack hell... we need this things because of upgrading from
 # previous grub versions. The problem is that previous grub packages
 # remove the stage files from /boot/grub in some cases, making the
@@ -357,6 +345,4 @@ fi
 %defattr(0644,root,root,0755)
 %doc AUTHORS BUGS ChangeLog docs/grub.ps docs/multiboot.ps NEWS README
 %doc THANKS TODO
-
-
 
