@@ -140,7 +140,7 @@ BuildRequires:	gcc4.2
 %endif
 BuildRequires:	glibc-static-devel
 BuildRequires:	libgpm-devel
-BuildRequires:	libncurses-devel
+BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
 BuildRequires:	texinfo
