@@ -1,0 +1,35 @@
+--- grub-0.97/grub/asmstub.c.orig	2011-06-07 19:25:07.483201450 -0300
++++ grub-0.97/grub/asmstub.c	2011-06-07 19:28:14.202125134 -0300
+@@ -871,23 +871,30 @@ get_diskinfo (int drive, struct geometry
+       /* The unpartitioned device name: /dev/XdX */
+       char *devname = device_map[drive];
+       char * buf, * buf_unaligned;
++      struct stat st;
++      int flags;
+ 
+       if (! devname)
+ 	return -1;
+ 
++      if (stat(devname, &st) == 0 && S_ISREG(st.st_mode))
++	flags = 0;
++      else
++	flags = O_DIRECT;
++
+       if (verbose)
+ 	grub_printf ("Attempt to open drive 0x%x (%s)\n",
+ 		     drive, devname);
+ 
+       /* Open read/write, or read-only if that failed. */
+       if (! read_only)
+-	disks[drive].flags = open (devname, O_RDWR | O_DIRECT);
++	disks[drive].flags = open (devname, O_RDWR | flags);
+ 
+       if (disks[drive].flags == -1)
+ 	{
+ 	  if (read_only || errno == EACCES || errno == EROFS || errno == EPERM)
+ 	    {
+-	      disks[drive].flags = open (devname, O_RDONLY | O_DIRECT);
++	      disks[drive].flags = open (devname, O_RDONLY | flags);
+ 	      if (disks[drive].flags == -1)
+ 		{
+ 		  assign_device_name (drive, 0);

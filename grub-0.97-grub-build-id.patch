@@ -1,0 +1,112 @@
+diff --git a/package/grub/patches/020-grub-build-id.patch b/package/grub/patches/020-grub-build-id.patch
+new file mode 100644
+index 0000000..7970fea
+--- /dev/null
++++ b/package/grub/patches/020-grub-build-id.patch
+@@ -0,0 +1,106 @@
++diff -ur grub-0.97-orig/acinclude.m4 grub-0.97/acinclude.m4
++--- grub-0.97-orig/acinclude.m4	2004-04-27 16:48:06.000000000 -0400
+++++ grub-0.97/acinclude.m4	2008-07-19 10:00:45.000000000 -0400
++@@ -57,7 +57,7 @@
++ fi
++ grub_cv_prog_objcopy_absolute=yes
++ for link_addr in 2000 8000 7C00; do
++-  if AC_TRY_COMMAND([${CC-cc} ${CFLAGS} -nostdlib -Wl,-N -Wl,-Ttext -Wl,$link_addr conftest.o -o conftest.exec]); then :
+++  if AC_TRY_COMMAND([${CC-cc} ${CFLAGS} -nostdlib -Wl,-N -Wl,-Ttext -Wl,$link_addr -Wl,--build-id=none conftest.o -o conftest.exec]); then :
++   else
++     AC_MSG_ERROR([${CC-cc} cannot link at address $link_addr])
++   fi
++diff -ur grub-0.97-orig/configure grub-0.97/configure
++--- grub-0.97-orig/configure	2005-05-07 22:48:12.000000000 -0400
+++++ grub-0.97/configure	2008-07-19 10:00:16.000000000 -0400
++@@ -3892,7 +3892,7 @@
++ fi
++ grub_cv_prog_objcopy_absolute=yes
++ for link_addr in 2000 8000 7C00; do
++-  if { ac_try='${CC-cc} ${CFLAGS} -nostdlib -Wl,-N -Wl,-Ttext -Wl,$link_addr conftest.o -o conftest.exec'
+++  if { ac_try='${CC-cc} ${CFLAGS} -nostdlib -Wl,-N -Wl,-Ttext -Wl,$link_addr -Wl,--build-id=none conftest.o -o conftest.exec'
++   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
++   (eval $ac_try) 2>&5
++   ac_status=$?
++diff -ur grub-0.97-orig/stage1/Makefile.am grub-0.97/stage1/Makefile.am
++--- grub-0.97-orig/stage1/Makefile.am	2004-07-16 07:44:56.000000000 -0400
+++++ grub-0.97/stage1/Makefile.am	2008-07-19 10:03:26.000000000 -0400
++@@ -5,7 +5,7 @@
++ 
++ # We can't use builtins or standard includes.
++ AM_CCASFLAGS = $(STAGE1_CFLAGS) -fno-builtin -nostdinc
++-LDFLAGS = -nostdlib -Wl,-N,-Ttext,7C00
+++LDFLAGS = -nostdlib -Wl,-N,-Ttext,7C00,--build-id=none
++ 
++ noinst_PROGRAMS = stage1.exec
++ stage1_exec_SOURCES = stage1.S stage1.h
++diff -ur grub-0.97-orig/stage1/Makefile.in grub-0.97/stage1/Makefile.in
++--- grub-0.97-orig/stage1/Makefile.in	2005-05-07 22:42:36.000000000 -0400
+++++ grub-0.97/stage1/Makefile.in	2008-07-19 10:03:44.000000000 -0400
++@@ -110,7 +110,7 @@
++ INSTALL_PROGRAM = @INSTALL_PROGRAM@
++ INSTALL_SCRIPT = @INSTALL_SCRIPT@
++ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
++-LDFLAGS = -nostdlib -Wl,-N,-Ttext,7C00
+++LDFLAGS = -nostdlib -Wl,-N,-Ttext,7C00,--build-id=none
++ LIBOBJS = @LIBOBJS@
++ LIBS = @LIBS@
++ LTLIBOBJS = @LTLIBOBJS@
++diff -ur grub-0.97-orig/stage2/Makefile.am grub-0.97/stage2/Makefile.am
++--- grub-0.97-orig/stage2/Makefile.am	2005-02-02 15:37:35.000000000 -0500
+++++ grub-0.97/stage2/Makefile.am	2008-07-19 10:04:41.000000000 -0400
++@@ -55,11 +55,11 @@
++ endif
++ MOSTLYCLEANFILES = $(noinst_PROGRAMS)
++ 
++-PRE_STAGE2_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,8200
++-START_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,8000
++-NBLOADER_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,0
++-PXELOADER_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,7C00
++-START_ELTORITO_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,7C00
+++PRE_STAGE2_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,8200 -Wl,--build-id=none
+++START_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,8000 -Wl,--build-id=none
+++NBLOADER_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,0 -Wl,--build-id=none
+++PXELOADER_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,7C00 -Wl,--build-id=none
+++START_ELTORITO_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,7C00 -Wl,--build-id=none
++ 
++ if NETBOOT_SUPPORT
++ NETBOOT_FLAGS = -I$(top_srcdir)/netboot -DSUPPORT_NETBOOT=1
++@@ -82,7 +82,7 @@
++ STAGE2_COMPILE = $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
++ 	$(NETBOOT_FLAGS) $(SERIAL_FLAGS) $(HERCULES_FLAGS)
++ 
++-STAGE1_5_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,2000
+++STAGE1_5_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,2000 -Wl,--build-id=none
++ STAGE1_5_COMPILE = $(STAGE2_COMPILE) -DNO_DECOMPRESSION=1 -DSTAGE1_5=1
++ 
++ # For stage2 target.
++diff -ur grub-0.97-orig/stage2/Makefile.in grub-0.97/stage2/Makefile.in
++--- grub-0.97-orig/stage2/Makefile.in	2005-05-07 22:42:39.000000000 -0400
+++++ grub-0.97/stage2/Makefile.in	2008-07-19 10:05:24.000000000 -0400
++@@ -468,11 +468,11 @@
++ @DISKLESS_SUPPORT_FALSE@noinst_DATA = pre_stage2 start start_eltorito
++ @DISKLESS_SUPPORT_TRUE@noinst_DATA = pre_stage2 start start_eltorito nbloader pxeloader diskless
++ MOSTLYCLEANFILES = $(noinst_PROGRAMS)
++-PRE_STAGE2_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,8200
++-START_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,8000
++-NBLOADER_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,0
++-PXELOADER_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,7C00
++-START_ELTORITO_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,7C00
+++PRE_STAGE2_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,8200 -Wl,--build-id=none
+++START_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,8000 -Wl,--build-id=none
+++NBLOADER_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,0 -Wl,--build-id=none
+++PXELOADER_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,7C00 -Wl,--build-id=none
+++START_ELTORITO_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,7C00 -Wl,--build-id=none
++ @NETBOOT_SUPPORT_FALSE@NETBOOT_FLAGS = 
++ @NETBOOT_SUPPORT_TRUE@NETBOOT_FLAGS = -I$(top_srcdir)/netboot -DSUPPORT_NETBOOT=1
++ @SERIAL_SUPPORT_FALSE@SERIAL_FLAGS = 
++@@ -482,7 +482,7 @@
++ STAGE2_COMPILE = $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
++ 	$(NETBOOT_FLAGS) $(SERIAL_FLAGS) $(HERCULES_FLAGS)
++ 
++-STAGE1_5_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,2000
+++STAGE1_5_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,2000 -Wl,--build-id=none
++ STAGE1_5_COMPILE = $(STAGE2_COMPILE) -DNO_DECOMPRESSION=1 -DSTAGE1_5=1
++ 
++ # For stage2 target.
