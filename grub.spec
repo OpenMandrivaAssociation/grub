@@ -1,10 +1,9 @@
-%define with_gcc_42 0
 %define _default_patch_fuzz 2
 
 Summary:	GRand Unified Bootloader
 Name:		grub
 Version:	0.97
-Release:	39
+Release:	40
 URL:		http://www.gnu.org/software/grub/
 Source0:	ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
 Source2:	menu.lst.example
@@ -135,16 +134,13 @@ License:	GPL
 Group:		System/Kernel and hardware
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.8
-%if %{with_gcc_42}
-BuildRequires:	gcc4.2
-%endif
 BuildRequires:	glibc-static-devel
-BuildRequires:	libgpm-devel
-BuildRequires:	pkgconfig(ncurses)
-#BuildRequires:	tetex-dvips
-#BuildRequires:	tetex-latex
-#BuildRequires:	texinfo
-Exclusivearch:	%ix86 x86_64 amd64 ia32e
+BuildRequires:	gpm-devel
+BuildRequires:	pkgconfig(ncursesw)
+BuildRequires:	tetex-dvips
+BuildRequires:	tetex-latex
+BuildRequires:	texinfo
+Exclusivearch:	%{ix86} x86_64 amd64 ia32e
 
 Provides:	bootloader
 
@@ -154,6 +150,13 @@ operating systems.  In addition to loading the Linux and *BSD kernels,
 it implements the Multiboot standard, which allows for flexible loading
 of multiple boot images (needed for modular kernels such as the GNU
 Hurd).
+
+%package	doc
+Summary:	More documentation for grub
+Group:		Books/Computer books
+
+%description	doc
+More documentation for grub
 
 %prep
 %setup -q
@@ -218,13 +221,14 @@ Hurd).
 
 %patch10017 -p0
 
+autoreconf -fi
+
 %build
 # force building grub.info from grub.texi (since patches do not edit both)
-# rm docs/grub.info
+rm docs/grub.info
 
 # automake 1.11.2
 perl -pi -e 's|pkglib_|pkgdata_|g;' stage{1,2}/Makefile.{am,in}
-autoreconf
 
 #<akdengi> New binutils with gold failed in adress check 7C00, 8000.
 #sed -e "s/for link_addr in 2000 8000 7C00/for link_addr in 2000/" -i configure
@@ -241,9 +245,9 @@ CFLAGS="-Os -static -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-fu
 	    --datadir=/lib/grub/%{_arch}-%{_vendor} \
 	    --disable-auto-linux-mem-opt
 %make pkgdatadir=/lib/grub/%{_arch}-%{_vendor}
+%make -C docs ps
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std pkgdatadir=/lib/grub/%{_arch}-%{_vendor}
 rm -f %{buildroot}/%{_infodir}/dir
 install -d %{buildroot}/boot/grub
@@ -333,6 +337,10 @@ fi
 %{_bindir}/mbchk
 /sbin/grub*
 
+%files doc
+%defattr(0644,root,root,0755)
+%doc AUTHORS BUGS ChangeLog docs/grub.ps docs/multiboot.ps NEWS README
+%doc THANKS TODO
 
 %changelog
 * Mon Oct 1 2012 Alexander Kazancev <akdengi> 0.97-38
