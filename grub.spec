@@ -130,6 +130,8 @@ Patch1153:	grub-uuid.diff
 # grub patch for dealing with build-id objheader inserted into stage1/2 files 
 Patch1155:	grub-0.97-grub-build-id.patch
 
+Patch1156:	grub-0.97-automake-fixes.patch
+
 License:	GPL
 Group:		System/Kernel and hardware
 BuildRequires:	autoconf2.5
@@ -209,6 +211,7 @@ More documentation for grub
 %patch1152 -p1 -b .gpt
 %patch1153 -p1 -b .uuid
 %patch1155 -p1
+%patch1156 -p1
 
 %patch10000 -p1
 %patch10001 -p1
