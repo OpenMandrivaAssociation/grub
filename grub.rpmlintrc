@@ -1,2 +1,0 @@
-addFilter("E: info-files-with-install-info-postin.*")
-addFilter("E: info-files-with-install-info-postun.*")
