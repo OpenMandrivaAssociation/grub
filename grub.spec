@@ -3,7 +3,7 @@
 Summary:	GRand Unified Bootloader
 Name:		grub
 Version:	0.97
-Release:	48
+Release:	49
 License:	GPLv2
 Group:		System/Kernel and hardware
 Url:		http://www.gnu.org/software/grub/
