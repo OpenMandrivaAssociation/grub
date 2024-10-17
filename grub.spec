@@ -6,7 +6,7 @@ Version:	0.97
 Release:	49
 License:	GPLv2
 Group:		System/Kernel and hardware
-Url:		http://www.gnu.org/software/grub/
+Url:		https://www.gnu.org/software/grub/
 Source0:	ftp://alpha.gnu.org/gnu/grub/%{name}-%{version}.tar.gz
 Source2:	menu.lst.example
 Exclusivearch:	%{ix86} x86_64 amd64 ia32e
