@@ -135,6 +135,9 @@ Patch1155:	grub-0.97-grub-build-id.patch
 
 Patch1156:	grub-0.97-automake-fixes.patch
 
+BuildRequires:	autoconf
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
 BuildRequires:	automake1.8
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
